@@ -38,7 +38,7 @@ chmod 755 cftemps/*.sh
 ```shell
 cftemps/install_script.sh
 ```
-* Change the applicable settings in the python script
+* Change the applicable settings in the [python script](cftemps/cftemps.py)
 ```
 username = 'USERNAME'
 password = 'PASSWORD'
