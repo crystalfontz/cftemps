@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+		<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+        <!--<script src="time_log.json"></script>
+        <script src="freezer_log.json"></script>
+        <script src="fridge_log.json"></script>-->
+
+        <script type="text/javascript">
+			var googleDataArray = [];
+			var filedata = [];
+
+			function displayGraph() {
+                var i;
+
+				googleDataArray.length = 0;
+                googleDataArray.push(["Time", "Fridge", "Freezer"]);
+
+				$.ajax({
+				  type: "GET",
+				  url: "temps.json",
+				  dataType: "json"
+				})
+				  .done(function( msg ) {
+					for (i = 0; i < msg.length; i++) {
+						googleDataArray.push([msg[i].timestamp, msg[i].fridge, msg[i].freezer]);
+					};
+					google.load("visualization", "1", {packages: ["corechart"], "callback": drawChart});
+				  });
+            }
+
+            function drawChart() {
+                var data = google.visualization.arrayToDataTable(googleDataArray);
+                var options = {
+                    title: 'CFA10036 Temperature Readings'
+                };
+
+                var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+            displayGraph();
+            setInterval(function () {displayGraph(); }, 5000);
+        </script>
+    </head>
+    <body>
+        <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    </body>
+</html>
