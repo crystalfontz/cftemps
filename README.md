@@ -16,29 +16,29 @@ The example is written as a jumping off point to be expanded into whatever appli
 
 Installation
 =======
-Cloning the project will pull down two folders 'www' and 'som'.
+Cloning the project will pull down two folders 'www' and 'cftemps'.
 
 The 'www' folder contains a webpage that needs to be put in the same location as the output of the python script and will be the entry point for the monitoring.
 This path needs to have ftp access and will need to be specified in the cftemps.py script
 
-The 'som' folder contains an installation shell script that will perform 3 functions.
+The 'cftemps' folder contains an installation shell script that will perform 3 functions.
 * Copy the device tree into the root folder that will enable 1-wire (w1_bus_master1) functionality on port 1 pin 21 of the SOM
 * Copy the actual initialization script into /etc/init.d/
 * Add the script to the default runlevels in rc.d
 
 Instructions
 =======
-* make a folder to house the project
-* clone the repository into the new folder
-* change permissions on the two shell scripts
+* Make a folder to house the project. All scripts point to /home/root/ by default but that can be changed
+* Clone the repository into the new folder
+* Change permissions on the two shell scripts
 ```shell
 chmod 755 cftemps/*.sh
 ```
-* run the installer
+* Run the installer
 ```shell
 cftemps/install_script.sh
 ```
-* Change the applicable settings in the [python script](som/cftemps.py)
+* Change the applicable settings in the python script
 ```
 username = 'USERNAME'
 password = 'PASSWORD'
