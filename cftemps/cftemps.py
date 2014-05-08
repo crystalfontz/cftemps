@@ -41,29 +41,34 @@ def _GetTemps():
 
 def GetTemps():
 	# This function takes the slave's obtained values and stores then in the arrays
+	# 60 seconds per minute = 60
+	# 60 minutes per hour = 60 * 60 = 3600
+	# 24 hours per day = 3600 * 24 = 86400
+	# 10 samples per second = 86400 /10 = 8640	
 	temps = _GetTemps()
-	if len(times)>=10000:
+	if len(times) >= 8640:
 		times.pop(0)
-	if len(cfaArray)>=10000:
+	if len(cfaArray) >= 8640:
 		cfaArray.pop(0)
 				
 	# PST offset
-	tempTime = datetime.datetime.now() + timedelta(hours =- 5)
+	tempTime = datetime.datetime.now()
 	times.append(tempTime.strftime('%Y-%m-%d_%I:%M%p'))
 	cfaArray.append({"timestamp": tempTime.strftime('%Y-%m-%d_%I:%M%p'), "freezer": temps[0], "fridge": temps[1]})
 
 LoadSlaves()
 while True:
-	# Read in the current temps 5 times
-	for i in range(0, 5):
+	# Read/Write/Upload every 30 seconds
+	for i in range(0, 3):
 		GetTemps()
+
+		# Write the values to the file
+		with open(logFileName, 'w') as f:
+			json.dump(cfaArray, f)
 	
-	# Write the values to the file
-	with open(logFileName, 'w') as f:
-		json.dump(cfaArray, f)
+		# delay for 10 seconds then do it again
+		time.sleep(10)
 	
 	# Upload the records to the webserver
 	os.system("ftpput -u " + username + " -p " + password + " -P 21 " + webserver + " " + remotePath + logFileName + " " + localPath + logFileName + ";")
 	
-	# delays for 5 seconds then do it again
-	time.sleep(5)
